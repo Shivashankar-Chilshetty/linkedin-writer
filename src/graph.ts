@@ -1,6 +1,6 @@
 
 import { State } from "./state";
-import { START, END, StateGraph, MemorySaver } from "@langchain/langgraph";
+import { START, END, StateGraph } from "@langchain/langgraph";
 import { model } from './model';
 import { AIMessage, HumanMessage, SystemMessage } from '@langchain/core/messages';
 
@@ -66,12 +66,12 @@ function shouldContinue(state: typeof State.State) {
     return 'critique';
 }
 
-const graph = new StateGraph(State)
+export const graph = new StateGraph(State)
     .addNode("writer", writer)
     .addNode("critique", critique)
     .addEdge(START, "writer")
     .addEdge("critique", "writer")
     .addConditionalEdges("writer", shouldContinue, {
-        END: END,
+        [END]: END,
         critique: "critique"
     });
